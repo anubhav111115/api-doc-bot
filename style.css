@@ -1,0 +1,106 @@
+/* static/style.css */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f0f2f5;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.form-section, .input-area {
+    margin-top: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-top: 6px;
+}
+
+button.btn-primary {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 12px;
+    text-align: center;
+    font-size: 16px;
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button.btn-primary:hover {
+    background-color: #45a049;
+}
+
+.response-section {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+    overflow-x: auto;
+}
+
+.navigate-link {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.navigate-link a {
+    text-decoration: none;
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+/* Chat window styling */
+.chat-window {
+    height: 400px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
+    background: #fefefe;
+    margin-bottom: 20px;
+}
+
+.bubble {
+    padding: 10px 15px;
+    margin: 8px 0;
+    border-radius: 18px;
+    max-width: 70%;
+    line-height: 1.4;
+}
+
+.user-bubble {
+    background-color: #dcf8c6;
+    margin-left: auto;
+    text-align: right;
+}
+
+.bot-bubble {
+    background-color: #ececec;
+    margin-right: auto;
+    text-align: left;
+}
