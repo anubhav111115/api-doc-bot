@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API ChatBot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: #1e1e2e;
+            font-family: 'Poppins', sans-serif;
+        }
+        .typing {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: white;
+            border-radius: 50%;
+            animation: blink 1s infinite alternate;
+            margin: 0 2px;
+        }
+        .typing:nth-child(2) { animation-delay: 0.2s; }
+        .typing:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes blink { 0% {opacity: 0.2;} 100% {opacity: 1;} }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center h-screen">
+
+    <div class="w-full max-w-3xl h-[90vh] bg-[#282a36] rounded-xl shadow-xl flex flex-col overflow-hidden">
+        <div class="bg-[#44475a] text-white text-center py-4 font-bold text-xl">API Documentation Bot 🤖</div>
+
+        <div id="chatBox" class="flex-1 p-4 overflow-y-auto flex flex-col">
+            <div class="bot-message bg-[#44475a] text-white p-3 rounded mb-2 max-w-[75%]">
+                👋 Hello! Ask me anything about APIs.
+            </div>
+        </div>
+
+        <div class="flex items-center bg-[#44475a] p-3">
+            <input type="text" id="query" placeholder="Type your question..." 
+                class="flex-1 p-3 rounded bg-[#333642] text-white text-base outline-none"
+                onkeypress="handleKeyPress(event)">
+            <button onclick="askBot()" class="ml-3 bg-[#007aff] p-3 rounded-full text-white hover:bg-blue-700">
+                ➤
+            </button>
+            <button onclick="startListening()" title="Voice input" class="ml-2 text-white hover:text-blue-400">
+                <img src="https://img.icons8.com/ios-filled/50/ffffff/microphone.png" width="24"/>
+            </button>
+        </div>
+
+        <footer class="bg-[#282a36] text-white text-center py-2 text-sm">
+            Made by Krishna Sah & Anubhav Singh ❤️
+        </footer>
+    </div>
+
+    <script>
+        function handleKeyPress(e) {
+            if (e.key === "Enter") askBot();
+        }
+
+        function addMessage(sender, text, isTyping = false) {
+            const chatBox = document.getElementById("chatBox");
+            const msg = document.createElement("div");
+            msg.className = `p-3 rounded mb-2 max-w-[75%] ${sender === "user" ? "bg-[#007aff] text-white self-end text-right" : "bg-[#44475a] text-white self-start text-left"}`;
+            msg.innerHTML = isTyping ? `<span class="typing"></span><span class="typing"></span><span class="typing"></span>` : text;
+            chatBox.appendChild(msg);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function updateLastBotMessage(text) {
+            const chatBox = document.getElementById("chatBox");
+            chatBox.lastChild.innerHTML = text;
+        }
+
+        async function askBot() {
+            const query = document.getElementById("query").value.trim();
+            if (!query) return;
+
+            addMessage("user", query);
+            document.getElementById("query").value = "";
+            addMessage("bot", "...", true);
+
+            try {
+                const res = await fetch("/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ message: query }),
+                });
+                const data = await res.json();
+                setTimeout(() => updateLastBotMessage(data.reply), 1000);
+            } catch {
+                setTimeout(() => updateLastBotMessage("❌ Error fetching response!"), 1000);
+            }
+        }
+
+        function startListening() {
+            if (!('webkitSpeechRecognition' in window)) return alert("Voice input not supported");
+
+            const recognition = new webkitSpeechRecognition();
+            recognition.lang = 'en-US';
+            recognition.start();
+
+            recognition.onresult = function(event) {
+                const text = event.results[0][0].transcript;
+                document.getElementById("query").value = text;
+                askBot();
+            };
+        }
+    </script>
+</body>
+</html>

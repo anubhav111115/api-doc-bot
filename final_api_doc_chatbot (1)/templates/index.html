@@ -1,0 +1,85 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>API Documentation Bot</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: #1e1e2e;
+            font-family: 'Poppins', sans-serif;
+        }
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #007aff;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen">
+
+    <div class="w-full max-w-3xl bg-[#282a36] rounded-xl shadow-xl p-6 flex flex-col gap-6">
+
+        <div class="bg-[#44475a] text-white text-center py-4 font-bold text-2xl rounded">
+            📚 API Documentation Fetcher
+        </div>
+
+        <!-- Form Section -->
+        <form id="fetchForm" method="POST" class="flex flex-col gap-4" onsubmit="showLoading()">
+            <div>
+                <label for="api_key" class="text-white text-sm mb-1 block">API Key (optional):</label>
+                <input type="text" id="api_key" name="api_key" placeholder="Enter API Key"
+                    class="w-full p-3 rounded bg-[#333642] text-white outline-none">
+            </div>
+
+            <div>
+                <label for="endpoint" class="text-white text-sm mb-1 block">API Endpoint:</label>
+                <input type="text" id="endpoint" name="endpoint" placeholder="https://api.example.com/endpoint" required
+                    class="w-full p-3 rounded bg-[#333642] text-white outline-none">
+            </div>
+
+            <button type="submit" id="submitBtn" class="w-full bg-[#007aff] hover:bg-blue-700 text-white p-3 rounded font-semibold">
+                Fetch API Details
+            </button>
+        </form>
+
+        <!-- Loading spinner (hidden by default) -->
+        <div id="loading" class="hidden flex justify-center">
+            <div class="spinner"></div>
+        </div>
+
+        <!-- Response Section -->
+        {% if response_data %}
+        <div class="bg-[#44475a] text-white p-4 rounded max-h-[400px] overflow-y-auto">
+            <h2 class="text-xl mb-3 font-semibold">Response Data:</h2>
+            <pre class="bg-[#333642] p-3 rounded overflow-x-auto">{{ response_data | tojson(indent=2) }}</pre>
+        </div>
+        {% endif %}
+
+        <!-- Link to Chatbot -->
+        <div class="text-center">
+            <a href="/chatbot" class="text-blue-400 hover:underline text-sm">
+                🤖 Go to Chatbot
+            </a>
+        </div>
+
+    </div>
+
+    <script>
+        function showLoading() {
+            document.getElementById('submitBtn').disabled = true;
+            document.getElementById('loading').classList.remove('hidden');
+        }
+    </script>
+
+</body>
+</html>
